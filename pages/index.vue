@@ -4,6 +4,7 @@
         <div class="container mx-auto">
             <div class="flex items-center justify-between">
                 <SiteLogo/>
+                <Paginatior :page="currentPage()" :totalPages="totalPages()" @onchange="goToPage" />
             </div>
         </div>
     </header>
@@ -23,7 +24,21 @@
 <script setup lang="ts">
 import { type Info, type Character, type CharacterFilter } from '~/types/interfaces';
 
-const characterFilter = ref<CharacterFilter>({page:1});
+const characterFilter = ref<CharacterFilter>({page: 1});
 const data = await useCharacter<Info<Character>>(characterFilter.value);
+
+const currentPage = (): number => {
+    if (characterFilter.value.page)
+        return characterFilter.value.page;
+    return 1;
+};
+const totalPages = (): number => {
+    if (data && data.value && data.value.info)
+        return data.value.info.pages;
+    return 1;
+}
+const goToPage = (page: number): void => {
+    characterFilter.value.page = page;
+}
 
 </script>
