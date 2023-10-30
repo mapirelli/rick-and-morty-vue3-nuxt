@@ -1,62 +1,70 @@
 <template>
-
     <SiteHeader>
         <SiteLogo />
         <Paginator :page="currentPage()" :totalPages="totalPages()" @onchange="goToPage" />
-        <button class="rounded focus:outline-none focus:ring" @click="menuVisible = true" >
-            <IconBars3 class="text-primary-700 stroke-2 h-7 w-7"/>
+        <button class="rounded focus:outline-none focus:ring" @click="menuVisible = true">
+            <IconBars3 class="text-primary-700 stroke-2 h-7 w-7" />
         </button>
     </SiteHeader>
 
-    <section class="container mx-auto">
-        <SearchBar>
-            <SearchInput @oninput="searchByName" />
-            <button id="toggleFiltersButton" class="rounded flex p-2 -mr-2 gap-2 items-center font-sans font-bold text-md uppercase 
+    <div class="fixed z-50 w-full">
+        <div class="px-4">
+            <section class="container mx-auto">
+                <SearchBar class="-mt-[30px]">
+                    <SearchInput @oninput="searchByName" />
+                    <button id="toggleFiltersButton" class="rounded flex py-2 -mr-2 gap-2 items-center font-sans font-bold text-md uppercase 
                 text-primary-700 hover:text-primary-500 focus:outline-none focus:ring"
-                @click="filtersMenuVisible = !filtersMenuVisible">
-                Filters
-                <IconFilter class="w-5 h-4 text-primary-400" v-if="!filtersMenuVisible" />
-                <IconXMark class="w-5 h-5 text-primary-400 stroke-2" v-if="filtersMenuVisible" />
-            </button>
-        </SearchBar>
-    </section>
+                        @click="filtersMenuVisible = !filtersMenuVisible">
+                        Filters
+                        <IconFilter class="w-5 h-4 text-primary-400" v-if="!filtersMenuVisible" />
+                        <IconXMark class="w-5 h-5 text-primary-400 stroke-2" v-if="filtersMenuVisible" />
+                    </button>
+                </SearchBar>
+            </section>
+        </div>
+    </div>
 
-    <section class="container mx-auto">
-        <transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0 translate-y-1"
-            enter-to-class="opacity-100 translate-y-0" leave-active-class="transition ease-in duration-150"
-            leave-from-class="opacity-100 translate-y-0" leave-to-class="opacity-0 translate-y-1">
-            <div v-if="filtersMenuVisible" class="fixed container mx-auto z-30 bg-primary-300 rounded-b-3xl px-8 pt-8 pb-4">
-                <div class="flex flex-col pt-8">
-                    <HeaderSubtitle>Gender</HeaderSubtitle>
-                    <div class="flex pt-2 pb-6">
-                        <SearchFilter group="Gender" name="Male" @onclick="toggleFilter" />
-                        <SearchFilter group="Gender" name="Female" @onclick="toggleFilter" />
-                        <SearchFilter group="Gender" name="Genderless" @onclick="toggleFilter" />
-                        <SearchFilter group="Gender" name="Unknown" @onclick="toggleFilter" />
+    <div class="fixed z-40 w-full">
+        <div class="px-4">
+            <section class="container mx-auto">
+                <transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0 translate-y-1"
+                    enter-to-class="opacity-100 translate-y-0" leave-active-class="transition ease-in duration-150"
+                    leave-from-class="opacity-100 translate-y-0" leave-to-class="opacity-0 translate-y-1">
+                    <div v-if="filtersMenuVisible" class="bg-primary-300 rounded-b-3xl px-8 pt-8 pb-4">
+                        <div class="flex flex-col pt-8">
+                            <HeaderSubtitle>Gender</HeaderSubtitle>
+                            <div class="flex flex-wrap gap-2 pt-2 pb-6">
+                                <SearchFilter group="Gender" name="Male" @onclick="toggleFilter" />
+                                <SearchFilter group="Gender" name="Female" @onclick="toggleFilter" />
+                                <SearchFilter group="Gender" name="Genderless" @onclick="toggleFilter" />
+                                <SearchFilter group="Gender" name="Unknown" @onclick="toggleFilter" />
+                            </div>
+                            <HeaderSubtitle>Status</HeaderSubtitle>
+                            <div class="flex flex-wrap gap-2  pt-2 pb-6">
+                                <SearchFilter group="Status" name="Alive" @onclick="toggleFilter" />
+                                <SearchFilter group="Status" name="Dead" @onclick="toggleFilter" />
+                                <SearchFilter group="Status" name="Unknown" @onclick="toggleFilter" />
+                            </div>
+                            <HeaderSubtitle>Species</HeaderSubtitle>
+                            <div class="flex flex-wrap gap-2  pt-2 pb-6">
+                                <SearchFilter group="Species" name="Human" @onclick="toggleFilter" />
+                                <SearchFilter group="Species" name="Alien" @onclick="toggleFilter" />
+                                <SearchFilter group="Species" name="Mythological Creature" @onclick="toggleFilter" />
+                            </div>
+                        </div>
                     </div>
-                    <HeaderSubtitle>Status</HeaderSubtitle>
-                    <div class="flex pt-2 pb-6">
-                        <SearchFilter group="Status" name="Alive" @onclick="toggleFilter" />
-                        <SearchFilter group="Status" name="Dead" @onclick="toggleFilter" />
-                        <SearchFilter group="Status" name="Unknown" @onclick="toggleFilter" />
-                    </div>
-                    <HeaderSubtitle>Species</HeaderSubtitle>
-                    <div class="flex pt-2 pb-6">
-                        <SearchFilter group="Species" name="Human" @onclick="toggleFilter" />
-                        <SearchFilter group="Species" name="Alien" @onclick="toggleFilter" />
-                        <SearchFilter group="Species" name="Mythological Creature" @onclick="toggleFilter" />
-                    </div>
-                </div>
-            </div>
-        </transition>
-    </section>
+                </transition>
+            </section>
+        </div>
+    </div>
 
-    <section class="container mx-auto mt-16 mb-10" :class="{ 'blur-sm': filtersMenuVisible }" >
-        <ResultSection :hasData="weGotData()">
-            <CharacterCard v-if="weGotData()" v-for="character in data.results" :character="character" />
-        </ResultSection>
-    </section>
-
+    <div class="px-4 pt-16 pb-10 bg-gradient-to-b from-primary-200" >
+        <section class="container mx-auto" :class="{ 'blur-sm': filtersMenuVisible }">
+            <ResultSection :hasData="weGotData()">
+                <CharacterCard v-if="weGotData()" v-for="character in data.results" :character="character" />
+            </ResultSection>
+        </section>
+    </div>
 </template>
 
 <script setup lang="ts">

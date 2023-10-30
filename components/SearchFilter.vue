@@ -1,5 +1,5 @@
 <template>
-  <button class="mr-3 px-4 py-1 min-w-[8%] uppercase rounded-lg font-bold text-sm text-center
+  <button class="px-4 py-1 min-w-[8%] uppercase rounded-lg font-bold text-sm text-center
       border border-primary-500 
       hover:border-primary-400 hover:
       focus:outline-none focus:ring" :class="{
