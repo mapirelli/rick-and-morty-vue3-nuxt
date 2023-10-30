@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <p>The default layout shared across all pages</p>
-    <slot />
-  </div>
+    <div class="bg-gradient-to-b from-gray-300" >
+        <slot />
+    </div>
 </template>
