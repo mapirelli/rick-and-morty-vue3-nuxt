@@ -1,13 +1,17 @@
 <template>
+
     <SiteHeader>
         <SiteLogo />
         <Paginator :page="currentPage()" :totalPages="totalPages()" @onchange="goToPage" />
+        <button class="rounded focus:outline-none focus:ring" @click="menuVisible = true" >
+            <IconBars3 class="text-primary-700 stroke-2 h-7 w-7"/>
+        </button>
     </SiteHeader>
 
     <section class="container mx-auto">
         <SearchBar>
             <SearchInput @oninput="searchByName" />
-            <button id="toggleFiltersButton" class="rounded flex p-2 items-center font-sans font-bold text-md uppercase 
+            <button id="toggleFiltersButton" class="rounded flex p-2 -mr-2 gap-2 items-center font-sans font-bold text-md uppercase 
                 text-primary-700 hover:text-primary-500 focus:outline-none focus:ring"
                 @click="filtersMenuVisible = !filtersMenuVisible">
                 Filters
@@ -15,11 +19,13 @@
                 <IconXMark class="w-5 h-5 text-primary-400 stroke-2" v-if="filtersMenuVisible" />
             </button>
         </SearchBar>
+    </section>
 
+    <section class="container mx-auto">
         <transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0 translate-y-1"
             enter-to-class="opacity-100 translate-y-0" leave-active-class="transition ease-in duration-150"
             leave-from-class="opacity-100 translate-y-0" leave-to-class="opacity-0 translate-y-1">
-            <div v-if="filtersMenuVisible" class="fixed container z-30 bg-primary-300 rounded-xl px-8 pt-8 pb-4">
+            <div v-if="filtersMenuVisible" class="fixed container mx-auto z-30 bg-primary-300 rounded-b-3xl px-8 pt-8 pb-4">
                 <div class="flex flex-col pt-8">
                     <HeaderSubtitle>Gender</HeaderSubtitle>
                     <div class="flex pt-2 pb-6">
@@ -45,11 +51,12 @@
         </transition>
     </section>
 
-    <section class="container mx-auto mt-16 mb-10">
+    <section class="container mx-auto mt-16 mb-10" :class="{ 'blur-sm': filtersMenuVisible }" >
         <ResultSection :hasData="weGotData()">
             <CharacterCard v-if="weGotData()" v-for="character in data.results" :character="character" />
         </ResultSection>
     </section>
+
 </template>
 
 <script setup lang="ts">
@@ -109,5 +116,8 @@ const toggleFilter = (group: string, name: string, value: boolean): void => {
         characterFilter.value.species = value ? name : undefined;
     }
 }
+
+//Menu logic
+const menuVisible = ref(false);
 
 </script>
