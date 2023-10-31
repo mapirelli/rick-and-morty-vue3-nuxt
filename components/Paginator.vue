@@ -7,7 +7,8 @@
       }">
       <IconArrowLeft class="stroke-2" />
     </button>
-    <span class="text-2xl font-bold font-serif text-primary-700"><span class="inline">Page</span> <span class="text-primary-400">{{ page }}</span> of
+    <span class="text-2xl font-bold font-serif text-primary-700"><span class="inline">Page</span> <span
+        class="text-primary-400">{{ page }}</span> of
       {{ totalPages }}</span>
     <button class="rounded-full p-1 focus:outline-none focus:ring" @click="() => $emit('onchange', page + 1)"
       :disabled="page == totalPages" :class="{
@@ -29,7 +30,5 @@ defineProps({
     required: true,
   },
 });
-
 defineEmits(['onchange']);
-
 </script>

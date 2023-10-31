@@ -32,10 +32,10 @@ const shortName = computed(() => {
   return props.character.name.split(' ')[0];
 });
 const genderAggettive = computed(() => {
-  return props.character.gender == 'Male' ? 'his' : 'her';
+  return props.character.gender == ('Male') ? 'his' : (props.character.gender == 'Female' ? 'her' : 'hir');
 });
 const genderPronoms = computed(() => {
-  return props.character.gender == 'Male' ? 'He' : 'She';
+  return props.character.gender == ('Male') ? 'He' : (props.character.gender == 'Female' ? 'She' : 'Ze');
 });
 const firstEpisodeSeen = computed(() => {
   const first = 0;
