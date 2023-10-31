@@ -1,11 +1,11 @@
 
-import { type CharacterFilter, type Info } from '~/types/interfaces';
+import { type CharacterFilter, type Info, type Character } from '~/types/interfaces';
 
-export default async <Info>(characterFilter: CharacterFilter) => {
+export default async (characterFilter: CharacterFilter) => {
 
   const url = 'https://rickandmortyapi.com/api/character';
 
-  const { data, error } = await useFetch<Info>(url, {
+  const { data, pending, error } = await useFetch<Info<Character[]>>(url, {
     params: characterFilter,
     watch: [characterFilter]
   });
@@ -17,5 +17,5 @@ export default async <Info>(characterFilter: CharacterFilter) => {
     });
   }
  
-  return data;
+  return { data, pending };
 }

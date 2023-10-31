@@ -12,10 +12,10 @@
                 <div class="divide-y divide-primary-100">
                     <HeaderTitle class="pb-2">Navigation</HeaderTitle>
                     <div class="space-y-2 pt-2">
-                        <a v-for="item in navigation" :key="item.name" :href="item.href"
+                        <NuxtLink v-for="item in navigation" :key="item.name" :href="item.href"
                             class="-mx-3 block rounded-lg px-3 py-2 text-lg font-sans leading-7 text-primary-700 hover:bg-primary-100">
                             {{ item.name }}
-                        </a>
+                        </NuxtLink>
                     </div>
                 </div>
             </div>
@@ -24,9 +24,10 @@
 </template>
 <script setup lang="ts">
 const navigationMenuVisible = useState('navigationMenuVisible', () => false);
+
 const navigation = [
-    { name: 'Paginated search', href: '#' },
-    { name: 'Infite scrolling', href: '#' },
+    { name: 'Paginated search', href: '/' },
+    { name: 'Infite scrolling', href: '/infinite' },
     { name: 'About', href: '#' },
 ]
 </script>

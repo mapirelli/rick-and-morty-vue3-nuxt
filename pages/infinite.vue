@@ -1,7 +1,6 @@
 <template>
     <SiteHeader>
         <SiteLogo />
-        <Paginator :page="currentPage()" :total-pages="totalPages()" @onchange="goToPage" />
         <ToggleNavigationButton />
     </SiteHeader>
 
@@ -15,7 +14,6 @@
             </section>
         </div>
     </div>
-
     <div class="fixed z-20 w-full">
         <div class="px-4">
             <section class="container mx-auto">
@@ -38,7 +36,6 @@
         </section>
     </div>
 </template>
-
 <script setup lang="ts">
 import { type Info, type Character, type CharacterFilter } from '~/types/interfaces';
 
@@ -51,12 +48,28 @@ clearNuxtState([
 
 //Fetch data logic
 const characterFilter = useState<CharacterFilter>('characterFilter', () => ({ page: 1 }));
-const { data, pending } = await useCharacter(characterFilter.value);
-watch(data, () =>{
-    window.scrollTo(0, 0);
-});
+const url = 'https://rickandmortyapi.com/api/character';
+
 //Filters menu logic
 const filtersMenuVisible = useState('filtersMenuVisible', () => false);
+
+const { data, pending } = await useFetch<Info<Character[]>>(url, {
+    params: characterFilter,
+    transform: (newData) => {
+        if (characterFilter.value.page == 1) {
+            window.scrollTo(0, 0);
+        } else {
+            const currResults = data.value ? data.value.results : null;
+            if (newData.results && currResults) {
+                newData.results.forEach((character) => {
+                    currResults.push(character);
+                });
+                newData.results = currResults;
+            }
+        }
+        return newData;
+    }
+});
 
 //Search input logic
 const searchByName = (name: string): void => {
@@ -66,19 +79,20 @@ const searchByName = (name: string): void => {
     }
 };
 
-//Paginator logic
-const currentPage = (): number => {
-    if (characterFilter.value.page)
-        return characterFilter.value.page;
-    return 1;
+onMounted(() => {
+    window.addEventListener("scroll", handleScroll)
+})
+
+onUnmounted(() => {
+    window.removeEventListener("scroll", handleScroll)
+})
+
+const handleScroll = () => {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
+        if (characterFilter.value.page && data.value && data.value.info)
+            if (data.value.info.pages > characterFilter.value.page)
+                characterFilter.value.page = characterFilter.value.page + 1;
+    }
 };
-const totalPages = (): number => {
-    if (data && data.value && data.value.info)
-        return data.value.info.pages;
-    return 1;
-}
-const goToPage = (page: number): void => {
-    characterFilter.value.page = page;
-}
 
 </script>
