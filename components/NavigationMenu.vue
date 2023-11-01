@@ -1,7 +1,7 @@
 <template>
     <nav id="navigationMenu" v-if="navigationMenuVisible" class="fixed inset-0 z-50 bg-primary-800/50">
         <div v-click-out-side="clickedOutSideMenu" class="fixed inset-y-0 right-0 z-40 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
-            <div class="fixed right-0 px-6">
+            <div class="fixed right-0 px-4 pt-2">
                  <button type="button" class="p-2 rounded focus:outline-none focus:ring text-morty-700" @click="navigationMenuVisible = false">
                     <IconXMark class="text-primary-700 stroke-2 h-7 w-7" />
                 </button>
