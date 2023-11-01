@@ -22,7 +22,7 @@
                 <transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0 translate-y-1"
                     enter-to-class="opacity-100 translate-y-0" leave-active-class="transition ease-in duration-150"
                     leave-from-class="opacity-100 translate-y-0" leave-to-class="opacity-0 translate-y-1">
-                    <div v-if="filtersMenuVisible" class="bg-primary-300 rounded-b-3xl px-8 pt-8 pb-4">
+                    <div v-if="filtersMenuVisible" v-click-out-side="clickedOutSideFilter" class="bg-primary-300 rounded-b-3xl px-8 pt-8 pb-4">
                         <FiltersMenu />
                     </div>
                 </transition>
@@ -41,7 +41,9 @@
 
 <script setup lang="ts">
 import { type Info, type Character, type CharacterFilter } from '~/types/interfaces';
+import { clickOutSide as vClickOutSide } from '@mahdikhashan/vue3-click-outside';
 
+clearNuxtData();
 clearNuxtState([
     'characterFilter',
     'filtersModel',
@@ -51,10 +53,14 @@ clearNuxtState([
 
 //Fetch data logic
 const characterFilter = useState<CharacterFilter>('characterFilter', () => ({ page: 1 }));
-const { data, pending } = await useCharacter(characterFilter.value);
+
+const { data, pending } = await useCharacter(characterFilter.value, false);
+
+
 watch(data, () =>{
     window.scrollTo(0, 0);
 });
+
 //Filters menu logic
 const filtersMenuVisible = useState('filtersMenuVisible', () => false);
 
@@ -79,6 +85,15 @@ const totalPages = (): number => {
 }
 const goToPage = (page: number): void => {
     characterFilter.value.page = page;
+}
+
+const clickedOutSideFilter = (event : Event) => {
+    if (event.target) {
+        const el = document.getElementById('toggleFiltersButton');
+        if (el && (el == event.target || el.contains(event.target as HTMLElement)))
+            return;
+        filtersMenuVisible.value = false;
+    }
 }
 
 </script>
