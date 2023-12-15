@@ -1,7 +1,7 @@
 <template>
     <SiteHeader>
         <SiteLogo />
-        <Paginator :page="currentPage()" :total-pages="totalPages()" @onchange="goToPage" />
+        <Paginator :page="currentPage" :total-pages="totalPages" @onchange="goToPage" />
         <ToggleNavigationButton />
     </SiteHeader>
 
@@ -57,7 +57,7 @@ const characterFilter = useState<CharacterFilter>('characterFilter', () => ({ pa
 const { data, pending } = await useCharacter(characterFilter.value, false);
 
 
-watch(data, () =>{
+watch(data, () => {
     window.scrollTo(0, 0);
 });
 
@@ -73,16 +73,14 @@ const searchByName = (name: string): void => {
 };
 
 //Paginator logic
-const currentPage = (): number => {
-    if (characterFilter.value.page)
-        return characterFilter.value.page;
-    return 1;
-};
-const totalPages = (): number => {
-    if (data && data.value && data.value.info)
-        return data.value.info.pages;
-    return 1;
-}
+const currentPage = computed(() => {
+    return characterFilter.value.page || 1;
+});
+
+const totalPages = computed(() => {
+    return data.value && data.value.info && data.value.info.pages || 1;
+});
+
 const goToPage = (page: number): void => {
     characterFilter.value.page = page;
 }
